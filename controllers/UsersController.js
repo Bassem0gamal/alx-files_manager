@@ -12,12 +12,21 @@ export default class UsersController {
       return res.status(400).send({ error: 'Missing password' });
     }
     try {
-      const user = await dbClient.dataClient.db().collection('users').findOne({ email });
+      const user = await dbClient.dataClient
+        .db()
+        .collection('users')
+        .findOne({ email });
       if (user) {
         return res.status(400).send({ error: 'Already exist' });
       }
-      const hashedPassword = crypto.createHash('sha1').update(password).digest('hex');
-      const result = await dbClient.dataClient.db().collection('users').insertOne({ email, password: hashedPassword });
+      const hashedPassword = crypto
+        .createHash('sha1')
+        .update(password)
+        .digest('hex');
+      const result = await dbClient.dataClient
+        .db()
+        .collection('users')
+        .insertOne({ email, password: hashedPassword });
       const userQueue = new Queue('userQueue');
       userQueue.add({ userId: result.insertedId });
       return res.status(201).send({ email, id: result.insertedId });
