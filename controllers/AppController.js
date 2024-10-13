@@ -6,14 +6,14 @@ export default class AppController {
     res.status(200).send('Hello my friend!');
   }
 
-  static Status(req, res) {
+  static getStatus(req, res) {
     res.status(200).json({
       redis: redisClient.isAlive(),
       db: dbClient.isAlive(),
     });
   }
 
-  static async Stats(req, res) {
+  static async getStats(req, res) {
     const [users, files] = await Promise.all([
       dbClient.nbUsers(),
       dbClient.nbFiles(),
